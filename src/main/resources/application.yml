@@ -1,0 +1,71 @@
+server:
+  port: 8092
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8091/eureka
+
+spring:
+  application:
+    name: eureka-api-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: eureka-auth-service
+          uri: lb://eureka-auth-service
+          predicates:
+            - Path=/api/v1/auth/**
+
+        - id: eureka-profile-service
+          uri: lb://eureka-profile-service
+          predicates:
+            - Path=/api/v1/profiles/**
+          filters:
+            - AuthFilter
+
+        - id: eureka-content-service
+          uri: lb://eureka-content-service
+          predicates:
+          - Path=/api/v1/content/**
+          filters:
+          - AuthFilter
+
+        - id: eureka-like-service
+          uri: lb://eureka-like-service
+          predicates:
+            - Path=/api/v1/likes/**
+          filters:
+            - AuthFilter
+
+        - id: eureka-notification-service
+          uri: lb://eureka-notification-service
+          predicates:
+            - Path=/api/v1/notifications/**
+          filters:
+            - AuthFilter
+
+        - id: eureka-follower-service
+          uri: lb://eureka-follower-service
+          predicates:
+            - Path=/api/v1/followers/**
+          filters:
+            - AuthFilter
+
+        - id: eureka-upload-service
+          uri: lb://eureka-upload-service
+          predicates:
+            - Path=/api/v1/upload/**
+          filters:
+            - AuthFilter
+
+        - id: eureka-direction-service
+          uri: lb://eureka-direction-service
+          predicates:
+            - Path=/api/v1/directions/**
+          filters:
+            - AuthFilter
